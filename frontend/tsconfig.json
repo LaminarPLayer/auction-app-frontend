@@ -20,7 +20,8 @@
     ],
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "types": ["@uploadcare/blocks/types/jsx"]
   },
   "include": [
     "next-env.d.ts",

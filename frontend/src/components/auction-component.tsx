@@ -8,6 +8,7 @@ import { useSession } from "next-auth/react";
 import { useRef, useState } from "react";
 import useSWR from "swr";
 import BidsSection from "./bids-section";
+import ImageUploader from "./image-uploader";
 import { Button } from "./ui/button";
 import {
   Card,
@@ -75,6 +76,8 @@ const AuctionComponent = ({ auction }: { auction: Auction }) => {
         <br />
         liczba zwycięzców: {auction.num_of_winners}
       </div>
+
+      <ImageUploader />
 
       <Card>
         <CardHeader className="flex-row items-center justify-between space-y-0 pt-5">

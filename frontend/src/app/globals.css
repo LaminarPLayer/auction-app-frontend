@@ -26,6 +26,14 @@
     --radius: 0.5rem;
   }
 
+  /* Uploadcare: */
+  :root .my-config {
+    --darkmode: 0;
+    --h-accent: 223;
+    --s-accent: 100%;
+    --l-accent: 61%;
+  }
+
   .dark {
     --background: 224 71.4% 4.1%;
     --foreground: 210 20% 98%;
@@ -46,6 +54,14 @@
     --border: 215 27.9% 16.9%;
     --input: 215 27.9% 16.9%;
     --ring: 216 12.2% 83.9%;
+  }
+
+  /* Uploadcare: */
+  .dark .my-config {
+    --darkmode: 1;
+    --h-accent: 223;
+    --s-accent: 100%;
+    --l-accent: 61%;
   }
 }
 
