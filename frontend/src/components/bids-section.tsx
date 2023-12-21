@@ -54,6 +54,11 @@ const BidsSection = ({
 
   const [bidValue, setBidValue] = useState<number>(minNewBidValue);
 
+  const deadline = new Date("2023-12-21T22:00:00.000Z");
+  const now = new Date();
+
+  const isDeadlinePassed = deadline < now;
+
   return (
     <Card>
       <CardHeader>
@@ -123,7 +128,8 @@ const BidsSection = ({
                     !bidValue ||
                     bidValue < minNewBidValue ||
                     (bids?.length > 0 &&
-                      bids[0].bidder_id === session?.user?.pk)
+                      bids[0].bidder_id === session?.user?.pk) ||
+                    isDeadlinePassed
                   }
                 >
                   Licytuj
