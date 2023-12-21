@@ -35,14 +35,15 @@ const AuctionCard = ({
       ? "own"
       : "not-bidding";
 
-  const cardBorderClass =
-    auctionStatus === "winning"
-      ? `border-2 border-green-500`
-      : auctionStatus === "losing"
-      ? `border-2 border-red-500`
-      : auctionStatus === "own"
-      ? `border-2 border-primary`
-      : "";
+  // const cardBorderClass =
+  //   auctionStatus === "winning"
+  //     ? `border-2 border-green-500`
+  //     : auctionStatus === "losing"
+  //     ? `border-2 border-red-500`
+  //     : auctionStatus === "own"
+  //     ? `border-2 border-primary`
+  //     : "";
+  const cardBorderClass = "";
 
   const badgeColorClass =
     auctionStatus === "winning"

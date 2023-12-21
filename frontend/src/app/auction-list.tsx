@@ -2,6 +2,7 @@
 
 import AuctionCard from "@/components/auction-card";
 import AuctionsFilter from "@/components/auctions-filter";
+import AuctionsSort from "@/components/auctions-sort";
 import { Loader } from "@/components/loader";
 import { Auction } from "@/lib/types/auction";
 import axios from "axios";
@@ -16,6 +17,13 @@ export enum AuctionsFilterOptions {
   My = "my",
   All = "all",
   Bid = "bid",
+}
+
+export enum AuctionsSortOptions {
+  Newest = "newest",
+  Oldest = "oldest",
+  Cheapest = "cheapest",
+  Expensive = "expensive",
 }
 
 const AuctionList = () => {
@@ -52,6 +60,31 @@ const AuctionList = () => {
     (option: AuctionsFilterOptions) => {
       setSelectedOption(option);
       router.push(pathname + "?" + createQueryString("filter", option));
+    },
+    [createQueryString, pathname, router],
+  );
+
+  const [selectedSortOption, setSelectedSortOption] =
+    useState<AuctionsSortOptions>(() => {
+      const sort = searchParams.get("sort");
+
+      if (sort === AuctionsSortOptions.Newest) {
+        return AuctionsSortOptions.Newest;
+      } else if (sort === AuctionsSortOptions.Oldest) {
+        return AuctionsSortOptions.Oldest;
+      } else if (sort === AuctionsSortOptions.Cheapest) {
+        return AuctionsSortOptions.Cheapest;
+      } else if (sort === AuctionsSortOptions.Expensive) {
+        return AuctionsSortOptions.Expensive;
+      } else {
+        return AuctionsSortOptions.Newest;
+      }
+    });
+
+  const handleSetSelectedSortOption = useCallback(
+    (option: AuctionsSortOptions) => {
+      setSelectedSortOption(option);
+      router.push(pathname + "?" + createQueryString("sort", option));
     },
     [createQueryString, pathname, router],
   );
@@ -95,15 +128,18 @@ const AuctionList = () => {
 
   return (
     <div className="flex w-full flex-col items-center gap-4">
-      <div className="flex w-full justify-center md:justify-start">
+      <div className="flex w-full flex-col items-start gap-3 md:flex-row md:justify-between">
         <AuctionsFilter
           selectedOption={selectedOption}
           setSelectedOption={handleSetSelectedOption}
         />
+        <AuctionsSort
+          selectedSortOption={selectedSortOption}
+          setSelectedSortOption={handleSetSelectedSortOption}
+        />
       </div>
       <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {auctions
-          .sort((a, b) => b.id - a.id)
           .filter((auction) => {
             if (selectedOption === AuctionsFilterOptions.My) {
               return auction.user === session?.user?.pk;
@@ -111,6 +147,23 @@ const AuctionList = () => {
               return biddingAuctions?.auctions?.includes(auction.id);
             } else {
               return true;
+            }
+          })
+          .sort((a, b) => {
+            if (selectedSortOption === AuctionsSortOptions.Newest) {
+              return b.id - a.id;
+            } else if (selectedSortOption === AuctionsSortOptions.Oldest) {
+              return a.id - b.id;
+            } else if (selectedSortOption === AuctionsSortOptions.Cheapest) {
+              const aBid = a.top_bid_value || a.min_bid_value || 0;
+              const bBid = b.top_bid_value || b.min_bid_value || 0;
+              return aBid - bBid;
+            } else if (selectedSortOption === AuctionsSortOptions.Expensive) {
+              const aBid = a.top_bid_value || a.min_bid_value || 0;
+              const bBid = b.top_bid_value || b.min_bid_value || 0;
+              return bBid - aBid;
+            } else {
+              return b.id - a.id;
             }
           })
           .map((auction) => {
