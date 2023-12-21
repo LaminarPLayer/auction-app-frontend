@@ -27,8 +27,6 @@ const AuctionsStats = () => {
     myAuctions ? myAuctions.map((auction) => auction.id) : [],
   );
 
-  console.log(myAuctionsBids);
-
   const myAuctionsWinningBidsValue = myAuctionsBids?.reduce(
     (acc, curr, index) => {
       const numOfWinners = myAuctions[index].num_of_winners;
@@ -72,7 +70,6 @@ const AuctionsStats = () => {
   );
 
   if (sumOfWinningBids && sumOfWinningBids !== value) {
-    console.log(sumOfWinningBids);
     setValue(sumOfWinningBids);
   }
 

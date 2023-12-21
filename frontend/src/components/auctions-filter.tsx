@@ -4,12 +4,14 @@ import { AuctionsFilterOptions } from "@/app/auction-list";
 import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
 
 const AuctionsFilter = ({
+  selectedOption,
   setSelectedOption: onChange,
 }: {
+  selectedOption: AuctionsFilterOptions;
   setSelectedOption: (value: AuctionsFilterOptions) => void;
 }) => {
   return (
-    <Tabs defaultValue="all" className="justify-center">
+    <Tabs defaultValue={selectedOption} className="justify-center">
       <TabsList className="flex justify-center">
         <TabsTrigger
           value={AuctionsFilterOptions.All}

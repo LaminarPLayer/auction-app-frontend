@@ -7,7 +7,8 @@ import { Auction } from "@/lib/types/auction";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useState } from "react";
 import useSWR from "swr";
 import { useBiddingAuctions, useWinningAuctions } from "./swr/use-auctions";
 
@@ -18,9 +19,41 @@ export enum AuctionsFilterOptions {
 }
 
 const AuctionList = () => {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const createQueryString = useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams);
+      params.set(name, value);
+
+      return params.toString();
+    },
+    [searchParams],
+  );
+
   const { data: session } = useSession();
   const [selectedOption, setSelectedOption] = useState<AuctionsFilterOptions>(
-    AuctionsFilterOptions.All,
+    () => {
+      const filter = searchParams.get("filter");
+
+      if (filter === AuctionsFilterOptions.My) {
+        return AuctionsFilterOptions.My;
+      } else if (filter === AuctionsFilterOptions.Bid) {
+        return AuctionsFilterOptions.Bid;
+      } else {
+        return AuctionsFilterOptions.All;
+      }
+    },
+  );
+
+  const handleSetSelectedOption = useCallback(
+    (option: AuctionsFilterOptions) => {
+      setSelectedOption(option);
+      router.push(pathname + "?" + createQueryString("filter", option));
+    },
+    [createQueryString, pathname, router],
   );
 
   const auctionsFetcher = (url: string) =>
@@ -63,7 +96,10 @@ const AuctionList = () => {
   return (
     <div className="flex w-full flex-col items-center gap-4">
       <div className="flex w-full justify-center md:justify-start">
-        <AuctionsFilter setSelectedOption={setSelectedOption} />
+        <AuctionsFilter
+          selectedOption={selectedOption}
+          setSelectedOption={handleSetSelectedOption}
+        />
       </div>
       <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {auctions
