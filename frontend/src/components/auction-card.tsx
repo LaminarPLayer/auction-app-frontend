@@ -37,11 +37,11 @@ const AuctionCard = ({
 
   const cardBorderClass =
     auctionStatus === "winning"
-      ? `border border-green-500`
+      ? `border-2 border-green-500`
       : auctionStatus === "losing"
-      ? `border border-red-500`
+      ? `border-2 border-red-500`
       : auctionStatus === "own"
-      ? `border border-primary`
+      ? `border-2 border-primary`
       : "";
 
   const badgeColorClass =
