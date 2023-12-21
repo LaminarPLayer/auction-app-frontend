@@ -26,9 +26,47 @@ const AuctionCard = ({
   isWinning: boolean;
   userId?: number;
 }) => {
+  const auctionStatus =
+    isBidding && isWinning
+      ? "winning"
+      : isBidding
+      ? "losing"
+      : userId && auction.user === userId
+      ? "own"
+      : "not-bidding";
+
+  const cardBorderClass =
+    auctionStatus === "winning"
+      ? `border border-green-500`
+      : auctionStatus === "losing"
+      ? `border border-red-500`
+      : auctionStatus === "own"
+      ? `border border-primary`
+      : "";
+
+  const badgeColorClass =
+    auctionStatus === "winning"
+      ? `bg-green-500`
+      : auctionStatus === "losing"
+      ? `bg-red-500`
+      : auctionStatus === "own"
+      ? `bg-primary`
+      : "";
+
+  const badgeText =
+    auctionStatus === "winning"
+      ? "Wygrywasz tę aukcję!"
+      : auctionStatus === "losing"
+      ? "Przegrywasz tę aukcję!"
+      : auctionStatus === "own"
+      ? "To Twoja aukcja ;)"
+      : "Nie licytujesz tej aukcji";
+
   return (
     <Link href={`/auction/${auction.id}`}>
-      <Card className="relative grid h-full grid-cols-1 overflow-hidden transition-colors hover:bg-accent ">
+      <Card
+        className={`relative grid h-full grid-cols-1 overflow-hidden ${cardBorderClass} transition-colors hover:bg-accent`}
+      >
         <div className="relative aspect-video w-full">
           {isValidUrl(auction.photo_url) ? (
             <Image
@@ -101,29 +139,14 @@ const AuctionCard = ({
               isUser={false}
             />
           )}
-          {isBidding && isWinning ? (
-            <Badge
-              variant={"defaultNoHover"}
-              className="w-full justify-center bg-green-600 dark:bg-green-400"
-            >
-              Wygrywasz tę aukcję!
-            </Badge>
-          ) : isBidding && !isWinning ? (
-            <Badge
-              variant={"defaultNoHover"}
-              className="w-full justify-center bg-red-600 dark:bg-red-400"
-            >
-              Przegrywasz tę aukcję!
-            </Badge>
-          ) : userId && auction.user === userId ? (
-            <Badge variant={"defaultNoHover"} className="w-full justify-center">
-              To Twoja aukcja ;)
-            </Badge>
-          ) : (
-            <Badge variant={"outline"} className="w-full justify-center">
-              Nie licytujesz tej aukcji
-            </Badge>
-          )}
+          <Badge
+            variant={
+              auctionStatus !== "not-bidding" ? "defaultNoHover" : "outline"
+            }
+            className={`w-full justify-center ${badgeColorClass}`}
+          >
+            {badgeText}
+          </Badge>
         </CardFooter>
       </Card>
     </Link>
