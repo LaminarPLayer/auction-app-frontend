@@ -1,1 +1,0 @@
-BID_INCREMENT = 10
