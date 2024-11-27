@@ -54,7 +54,7 @@ const BidsSection = ({
 
   const [bidValue, setBidValue] = useState<number>(minNewBidValue);
 
-  const deadline = new Date("2023-12-21T22:00:00.000Z");
+  const deadline = new Date("2024-12-22T22:00:00.000Z");
   const now = new Date();
 
   const isDeadlinePassed = deadline < now;
