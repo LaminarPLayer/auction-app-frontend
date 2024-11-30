@@ -22,6 +22,7 @@ export function PHProvider({ children }: { children: React.ReactNode }) {
         api_host: posthogHost,
         person_profiles: "always",
         capture_pageview: false, // Disable automatic pageview capture, as we capture manually
+        capture_pageleave: true,
       });
     }
   }, []);
