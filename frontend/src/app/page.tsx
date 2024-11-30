@@ -4,11 +4,13 @@ import AuctionsStats from "@/components/auctions-stats";
 import { Loader } from "@/components/loader";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { useUser } from "@/lib/hooks/useUser";
 import { signIn, useSession } from "next-auth/react";
 import AuctionList from "./auction-list";
 
 export default function Home() {
   const { data: session, status } = useSession();
+  const { user } = useUser();
 
   if (status === "loading") return <Loader />;
   if (status === "unauthenticated")
@@ -24,23 +26,26 @@ export default function Home() {
       </div>
     );
 
+  const name = user?.last_name
+    ? `${user.first_name} ${user.last_name}`
+    : session?.user?.username;
+
   return (
     <main className="container flex flex-col items-center justify-between gap-4 p-4">
-      <h1 className="text-3xl font-bold">
-        Cześć, {session?.user?.username}! 👋
-      </h1>
-      <p className="text-xl">
-        Witamy Cię w aplikacji licytacyjnej postDA 2023 💒
+      <h1 className="text-3xl font-bold">Cześć, {name}! 👋</h1>
+      <p className="text-center text-xl">
+        Witamy Cię w aplikacji licytacyjnej postDA 2024 💒
       </p>
-      <p className="text-xl">
-        W tym roku zbieramy fundusze na{" "}
+      <p className="text-center text-xl">
+        W tym roku będziemy wspierać{" "}
         <a
           className="text-primary underline underline-offset-4"
-          href="https://www.siepomaga.pl/wchzws"
+          href="https://fundacja-kapucynska.org/"
         >
-          Wspólnotę Chleb Życia
-        </a>{" "}
-        🥖❤️
+          Fundację Kapucyńską
+        </a>
+        , która przy ul. Miodowej prowadzi jadłodajnię dla ludzi ubogich i
+        bezdomnych oraz punkt wydawania leków i ubrań. 🍲 💊 👕 ❤️
       </p>
       {/* <p className="text-xl">
         Jeśli macie pomysły na funkcję dla tej aplikacji, możecie je zgłaszać{" "}
