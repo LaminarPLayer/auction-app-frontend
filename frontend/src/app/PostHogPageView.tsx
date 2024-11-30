@@ -2,14 +2,14 @@
 
 import { usePathname, useSearchParams } from "next/navigation";
 import { usePostHog } from "posthog-js/react";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 
-export default function PostHogPageView(): null {
+function PostHogPageViewInner(): null {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const posthog = usePostHog();
+
   useEffect(() => {
-    // Track pageviews
     if (pathname && posthog) {
       let url = window.origin + pathname;
       if (searchParams.toString()) {
@@ -22,4 +22,12 @@ export default function PostHogPageView(): null {
   }, [pathname, searchParams, posthog]);
 
   return null;
+}
+
+export default function PostHogPageView(): JSX.Element {
+  return (
+    <Suspense>
+      <PostHogPageViewInner />
+    </Suspense>
+  );
 }

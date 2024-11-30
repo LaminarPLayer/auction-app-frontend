@@ -80,7 +80,7 @@ const Page = () => {
     } catch (error) {
       toast({
         title: "Nie udało się utworzyć aukcji",
-        description: <> `${error}` </>,
+        description: `${error}`,
         variant: "destructive",
       });
       return;
