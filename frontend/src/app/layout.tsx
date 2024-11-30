@@ -4,8 +4,10 @@ import { Toaster } from "@/components/ui/toaster";
 import { EdgeStoreProvider } from "@/lib/edgestore";
 import type { Metadata } from "next";
 import { Rubik } from "next/font/google";
+import PostHogIdentify from "./PostHogIdentify";
+import PostHogPageView from "./PostHogPageView";
 import "./globals.css";
-import { NextAuthProvider } from "./providers";
+import { NextAuthProvider, PHProvider } from "./providers";
 
 const rubik = Rubik({
   weight: ["400", "500", "700"],
@@ -27,24 +29,28 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${rubik.className}`}>
-        <div className="relative flex min-h-screen flex-col">
-          <NextAuthProvider>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange
-            >
-              <EdgeStoreProvider>
-                <Navbar />
-                <main>{children}</main>
-                <Toaster />
-              </EdgeStoreProvider>
-            </ThemeProvider>
-          </NextAuthProvider>
-        </div>
-      </body>
+      <NextAuthProvider>
+        <PHProvider>
+          <body className={`${rubik.className}`}>
+            <PostHogPageView />
+            <PostHogIdentify />
+            <div className="relative flex min-h-screen flex-col">
+              <ThemeProvider
+                attribute="class"
+                defaultTheme="system"
+                enableSystem
+                disableTransitionOnChange
+              >
+                <EdgeStoreProvider>
+                  <Navbar />
+                  <main>{children}</main>
+                  <Toaster />
+                </EdgeStoreProvider>
+              </ThemeProvider>
+            </div>
+          </body>
+        </PHProvider>
+      </NextAuthProvider>
     </html>
   );
 }
