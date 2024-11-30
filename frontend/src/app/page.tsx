@@ -36,7 +36,7 @@ export default function Home() {
       <p className="text-center text-xl">
         Witamy Cię w aplikacji licytacyjnej postDA 2024 💒
       </p>
-      <p className="text-center text-xl">
+      <p className="text-balance text-center text-xl">
         W tym roku będziemy wspierać{" "}
         <a
           className="text-primary underline underline-offset-4"
