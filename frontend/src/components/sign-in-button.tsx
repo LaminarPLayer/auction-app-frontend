@@ -1,13 +1,16 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Loader2, LogIn, LogOut, User } from "lucide-react";
+import { useUser } from "@/lib/hooks/useUser";
+import { Loader2, LogIn, LogOut } from "lucide-react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 export function SignInButton() {
   const router = useRouter();
   const { data: session, status } = useSession();
+  const { user } = useUser();
 
   if (status == "loading") {
     return (
@@ -21,14 +24,19 @@ export function SignInButton() {
     <>
       {session ? (
         <>
-          <Button
-            variant="outline"
-            onClick={() => router.push("/profile")}
-            size={"icon"}
-            title="Profil"
-          >
-            <User className="h-5 w-5" />
-          </Button>
+          <button onClick={() => router.push("/profile")} title="Profil">
+            <Avatar>
+              <AvatarImage src={session.picture || ""} />
+              <AvatarFallback>
+                {(
+                  (user?.first_name?.[0] || "") +
+                    (user?.last_name?.[0] || "") ||
+                  session.user.username?.[0] ||
+                  "U"
+                ).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+          </button>
           <Button
             variant="outline"
             className="flex gap-2"

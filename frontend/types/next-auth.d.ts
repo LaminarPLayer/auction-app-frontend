@@ -11,6 +11,7 @@ declare module "next-auth" {
   interface Session {
     access_token: string;
     refresh_token: string;
+    picture: string | null;
     user: {
       pk: number;
       username: string;
