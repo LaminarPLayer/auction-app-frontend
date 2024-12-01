@@ -10,9 +10,9 @@ import AuctionList from "./auction-list";
 
 export default function Home() {
   const { data: session, status } = useSession();
-  const { user } = useUser();
+  const { user, isLoading } = useUser();
 
-  if (status === "loading") return <Loader />;
+  if (status === "loading" || isLoading) return <Loader />;
   if (status === "unauthenticated")
     return (
       <div className="p-4 text-center">
