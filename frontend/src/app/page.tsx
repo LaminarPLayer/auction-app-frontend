@@ -32,7 +32,7 @@ export default function Home() {
 
   return (
     <main className="container flex flex-col items-center justify-between gap-4 p-4">
-      <h1 className="text-3xl font-bold">Cześć, {name}! 👋</h1>
+      <h1 className="text-center text-3xl font-bold">Cześć, {name}! 👋</h1>
       <p className="text-center text-xl">
         Witamy Cię w aplikacji licytacyjnej postDA 2024 💒
       </p>
