@@ -4,6 +4,7 @@ import ChangeUserDataModal from "@/components/change-user-data-modal";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { useUser } from "@/lib/hooks/useUser";
+import { Loader2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useState } from "react";
@@ -14,7 +15,11 @@ export default function Profile() {
   const { user, isLoading, isError } = useUser();
 
   if (status == "loading" || isLoading) {
-    return <div className="h-4 w-4 animate-spin bg-primary"></div>;
+    return (
+      <div className="container mx-auto flex max-w-2xl justify-center p-6">
+        <Loader2 className="size-5 animate-spin" />
+      </div>
+    );
   }
 
   if (!session) {

@@ -1,6 +1,12 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useUser } from "@/lib/hooks/useUser";
 import { Loader2, LogIn, LogOut } from "lucide-react";
 import { signIn, signOut, useSession } from "next-auth/react";
@@ -24,28 +30,37 @@ export function SignInButton() {
     <>
       {session ? (
         <>
-          <button onClick={() => router.push("/profile")} title="Profil">
-            <Avatar>
-              <AvatarImage src={session.picture || ""} />
-              <AvatarFallback>
-                {(
-                  (user?.first_name?.[0] || "") +
-                    (user?.last_name?.[0] || "") ||
-                  session.user.username?.[0] ||
-                  "U"
-                ).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-          </button>
-          <Button
-            variant="outline"
-            className="flex gap-2"
-            onClick={() => signOut({ callbackUrl: "/" })}
-            title="Wyloguj się"
-          >
-            <span>Wyloguj się</span>
-            <LogOut className="h-5 w-5" />
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                onClick={() => router.push("/profile")}
+                title="Profil"
+                variant={"outline"}
+                className="pr-0"
+              >
+                {session.user.username}
+                <Avatar className="ml-3">
+                  <AvatarImage src={session.picture || ""} />
+                  <AvatarFallback>
+                    {(
+                      (user?.first_name?.[0] || "") +
+                        (user?.last_name?.[0] || "") ||
+                      session.user.username?.[0] ||
+                      "U"
+                    ).toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => router.push("/profile")}>
+                Profil
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => signOut({ callbackUrl: "/" })}>
+                Wyloguj się
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </>
       ) : (
         <Button
