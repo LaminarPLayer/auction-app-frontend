@@ -3,13 +3,15 @@ import { SignInButton } from "@/components/sign-in-button";
 import Image from "next/image";
 import Link from "next/link";
 import { DarkModeToggle } from "../components/dark-mode-toggle";
+import { LogoBackIcon } from "../components/logo-back-icon";
 
 const Navbar = () => {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 items-center justify-between px-4">
         <Link href="/">
-          <div className="flex items-center gap-1">
+          <div className="relative flex items-center gap-1">
+            <LogoBackIcon className="absolute -left-3 -mr-1 size-4" />
             <Image
               src="/logo-darkmode.svg"
               alt="logo"
