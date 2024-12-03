@@ -12,27 +12,16 @@ export function AddAuctionButton() {
   return (
     <>
       {session ? (
-        <>
-          <Button
-            variant="outline"
-            className="hidden gap-2 sm:flex"
-            size="default"
-            title="Utwórz aukcję"
-            onClick={() => router.push("/auction/add")}
-          >
-            <Plus className="h-5 w-5" />
-            <span>Utwórz aukcję</span>
-          </Button>
-          <Button
-            variant="outline"
-            className="sm:hidden"
-            size="icon"
-            title="Utwórz aukcję"
-            onClick={() => router.push("/auction/add")}
-          >
-            <Plus className="h-5 w-5" />
-          </Button>
-        </>
+        <Button
+          variant="default"
+          className="flex gap-2"
+          size="default"
+          title="Utwórz aukcję"
+          onClick={() => router.push("/auction/add")}
+        >
+          <Plus className="h-5 w-5" />
+          <span>Utwórz aukcję</span>
+        </Button>
       ) : null}
     </>
   );

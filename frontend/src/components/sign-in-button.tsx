@@ -35,11 +35,13 @@ export function SignInButton() {
               <Button
                 onClick={() => router.push("/profile")}
                 title="Profil"
-                variant={"outline"}
-                className="pr-0"
+                variant={"secondary"}
+                className="pl-0 pr-0 sm:pl-4"
               >
-                {session.user.username}
-                <Avatar className="ml-3">
+                <span className="hidden sm:inline">
+                  {session.user.username}
+                </span>
+                <Avatar className="sm:ml-3">
                   <AvatarImage src={session.picture || ""} />
                   <AvatarFallback>
                     {(
