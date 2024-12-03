@@ -4,7 +4,7 @@ import ChangeUserDataModal from "@/components/change-user-data-modal";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { useUser } from "@/lib/hooks/useUser";
-import { Loader2 } from "lucide-react";
+import { Loader2, UserPen } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useState } from "react";
@@ -12,7 +12,7 @@ import { useState } from "react";
 export default function Profile() {
   const { data: session, status } = useSession({ required: true });
   const [open, setOpen] = useState(false);
-  const { user, isLoading, isError } = useUser();
+  const { user, isLoading, isError, mutate } = useUser();
 
   if (status == "loading" || isLoading) {
     return (
@@ -35,7 +35,7 @@ export default function Profile() {
   }
 
   return (
-    <div className="container mx-auto mt-8 flex max-w-2xl flex-col gap-6">
+    <div className="container mx-auto mt-8 flex max-w-2xl flex-col items-center gap-6">
       <div className="flex flex-col items-center justify-between gap-4">
         <div className="flex flex-col items-center gap-6 sm:flex-row">
           <Image
@@ -64,29 +64,24 @@ export default function Profile() {
             </p>
           </div>
         </div>
-
+      </div>
+      <div>
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
             <Button variant="outline">
               <span className="flex items-center gap-2">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
-                </svg>
+                <UserPen className="size-4" />
                 Edytuj imię i nazwisko
               </span>
             </Button>
           </DialogTrigger>
-          <ChangeUserDataModal user={user} onSuccess={() => setOpen(false)} />
+          <ChangeUserDataModal
+            user={user}
+            onSuccess={() => {
+              setOpen(false);
+              mutate();
+            }}
+          />
         </Dialog>
       </div>
 
