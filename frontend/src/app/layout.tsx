@@ -1,4 +1,5 @@
 import Navbar from "@/app/navbar";
+import CountdownTimer from "@/components/countdown-timer";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { EdgeStoreProvider } from "@/lib/edgestore";
@@ -34,7 +35,7 @@ export default function RootLayout({
           <body className={`${rubik.className}`}>
             <PostHogPageView />
             <PostHogIdentify />
-            <div className="relative flex min-h-screen flex-col">
+            <div className="relative flex min-h-screen flex-col items-center">
               <ThemeProvider
                 attribute="class"
                 defaultTheme="system"
@@ -43,6 +44,7 @@ export default function RootLayout({
               >
                 <EdgeStoreProvider>
                   <Navbar />
+                  <CountdownTimer />
                   <main>{children}</main>
                   <Toaster />
                 </EdgeStoreProvider>
