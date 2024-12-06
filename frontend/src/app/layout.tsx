@@ -1,5 +1,4 @@
 import Navbar from "@/app/navbar";
-import CountdownTimer from "@/components/countdown-timer";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { EdgeStoreProvider } from "@/lib/edgestore";
@@ -44,7 +43,6 @@ export default function RootLayout({
               >
                 <EdgeStoreProvider>
                   <Navbar />
-                  <CountdownTimer />
                   <main>{children}</main>
                   <Toaster />
                 </EdgeStoreProvider>

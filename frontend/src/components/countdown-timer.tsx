@@ -63,7 +63,7 @@ export default function CountdownTimer() {
   };
 
   return (
-    <div className="mx-6 my-4 flex flex-col items-center gap-1">
+    <div className="mx-6 flex flex-col items-center gap-1">
       <div className="whitespace-nowrap">Do końca licytacji zostało:</div>
       <div
         className={`grid ${

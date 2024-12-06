@@ -21,7 +21,7 @@ const ChangeUserDataModal = ({
   user: User;
   onSuccess: () => void;
 }) => {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
 
   const handleUserDataChange = async (firstName: string, lastName: string) => {
     await axios({
@@ -81,7 +81,7 @@ const ChangeUserDataModal = ({
           onClick={() => {
             handleUserDataChange(firstName, lastName);
           }}
-          disabled={false}
+          disabled={!firstName.trim() || !lastName.trim()}
         >
           Zapisz
         </Button>
