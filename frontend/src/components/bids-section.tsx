@@ -49,12 +49,12 @@ const BidsSection = ({
   const minNewBidValue = auction.top_bid_value
     ? auction.top_bid_value + 10
     : auction.min_bid_value
-    ? auction.min_bid_value
-    : 10;
+      ? auction.min_bid_value
+      : 10;
 
   const [bidValue, setBidValue] = useState<number>(minNewBidValue);
 
-  const deadline = new Date("2024-12-22T22:00:00.000Z");
+  const deadline = new Date("2024-12-22T19:30:00.000Z");
   const now = new Date();
 
   const isDeadlinePassed = deadline < now;

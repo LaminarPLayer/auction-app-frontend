@@ -1,6 +1,7 @@
 import Navbar from "@/app/navbar";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
+import { WelcomeModalProvider } from "@/lib/contexts/welcome-modal-context";
 import { EdgeStoreProvider } from "@/lib/edgestore";
 import type { Metadata } from "next";
 import { Rubik } from "next/font/google";
@@ -31,24 +32,26 @@ export default function RootLayout({
     <html lang="en">
       <NextAuthProvider>
         <PHProvider>
-          <body className={`${rubik.className}`}>
-            <PostHogPageView />
-            <PostHogIdentify />
-            <div className="relative flex min-h-screen flex-col items-center">
-              <ThemeProvider
-                attribute="class"
-                defaultTheme="system"
-                enableSystem
-                disableTransitionOnChange
-              >
-                <EdgeStoreProvider>
-                  <Navbar />
-                  <main>{children}</main>
-                  <Toaster />
-                </EdgeStoreProvider>
-              </ThemeProvider>
-            </div>
-          </body>
+          <WelcomeModalProvider>
+            <body className={`${rubik.className}`}>
+              <PostHogPageView />
+              <PostHogIdentify />
+              <div className="relative flex min-h-screen flex-col items-center">
+                <ThemeProvider
+                  attribute="class"
+                  defaultTheme="system"
+                  enableSystem
+                  disableTransitionOnChange
+                >
+                  <EdgeStoreProvider>
+                    <Navbar />
+                    <main>{children}</main>
+                    <Toaster />
+                  </EdgeStoreProvider>
+                </ThemeProvider>
+              </div>
+            </body>
+          </WelcomeModalProvider>
         </PHProvider>
       </NextAuthProvider>
     </html>
