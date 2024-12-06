@@ -68,7 +68,7 @@ export default function Profile() {
       <div>
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
-            <Button variant="outline">
+            <Button variant="default">
               <span className="flex items-center gap-2">
                 <UserPen className="size-4" />
                 Edytuj imię i nazwisko
@@ -85,7 +85,7 @@ export default function Profile() {
         </Dialog>
       </div>
 
-      <div className="space-y-4">
+      {/* <div className="space-y-4">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div className="rounded-lg bg-muted p-4">
             <p className="text-sm text-muted-foreground">ID użytkownika</p>
@@ -98,7 +98,7 @@ export default function Profile() {
             <p className="font-medium">{session.user.username}</p>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }
