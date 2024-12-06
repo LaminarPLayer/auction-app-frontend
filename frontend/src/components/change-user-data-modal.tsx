@@ -59,7 +59,9 @@ const ChangeUserDataModal = ({
           Nick z Discorda: <span className="font-mono">{user.username}</span>
         </div>
         <div className="flex items-baseline gap-2">
-          <Label htmlFor="first_name">Imię:</Label>
+          <Label className="whitespace-nowrap" htmlFor="first_name">
+            Imię: *
+          </Label>
           <Input
             type="text"
             id="first_name"
@@ -68,7 +70,9 @@ const ChangeUserDataModal = ({
           />
         </div>
         <div className="flex items-baseline gap-2">
-          <Label htmlFor="last_name">Nazwisko:</Label>
+          <Label className="whitespace-nowrap" htmlFor="last_name">
+            Nazwisko: *
+          </Label>
           <Input
             type="text"
             id="last_name"
