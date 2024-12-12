@@ -101,7 +101,13 @@ export default function Profile() {
       <section className="w-full">
         <h2 className="mb-6 text-xl font-semibold">Edycja danych</h2>
         <div className="rounded-lg border bg-card p-6 shadow-sm">
-          <div className="w-full max-w-md space-y-4">
+          <form
+            className="w-full max-w-md space-y-4"
+            onSubmit={async (e) => {
+              e.preventDefault();
+              await handleUserDataChange();
+            }}
+          >
             <div className="space-y-2">
               <Label className="whitespace-nowrap" htmlFor="first_name">
                 Imię: *
@@ -109,8 +115,10 @@ export default function Profile() {
               <Input
                 type="text"
                 id="first_name"
+                name="first_name"
                 value={firstName || ""}
                 onChange={(e) => setFirstName(e.target.value)}
+                required
               />
             </div>
             <div className="space-y-2">
@@ -120,19 +128,21 @@ export default function Profile() {
               <Input
                 type="text"
                 id="last_name"
+                name="last_name"
                 value={lastName || ""}
                 onChange={(e) => setLastName(e.target.value)}
+                required
               />
             </div>
 
             <Button
-              onClick={handleUserDataChange}
+              type="submit"
               disabled={!firstName?.trim() || !lastName?.trim()}
               className="w-full"
             >
               Zapisz zmiany
             </Button>
-          </div>
+          </form>
         </div>
       </section>
     </div>
