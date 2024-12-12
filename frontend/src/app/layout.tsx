@@ -45,7 +45,7 @@ export default function RootLayout({
                 >
                   <EdgeStoreProvider>
                     <Navbar />
-                    <main>{children}</main>
+                    <main className="w-full">{children}</main>
                     <Toaster />
                   </EdgeStoreProvider>
                 </ThemeProvider>

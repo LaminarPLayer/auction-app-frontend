@@ -10,11 +10,7 @@ export const LogoWithBack = () => {
 
   const handleLogoClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    if (window.history.length > 1) {
-      router.back();
-    } else {
-      router.push("/", { scroll: false });
-    }
+    router.push("/");
   };
 
   return (
