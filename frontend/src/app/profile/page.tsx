@@ -1,18 +1,41 @@
 "use client";
 
-import ChangeUserDataModal from "@/components/change-user-data-modal";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { useUser } from "@/lib/hooks/useUser";
-import { Loader2, UserPen } from "lucide-react";
+import axios from "axios";
+import { Loader2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Profile() {
   const { data: session, status } = useSession({ required: true });
-  const [open, setOpen] = useState(false);
   const { user, isLoading, isError, mutate } = useUser();
+
+  // Add state for form inputs
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+
+  // Add handler for user data changes
+  const handleUserDataChange = async () => {
+    await axios({
+      method: "post",
+      url: process.env.NEXT_PUBLIC_BACKEND_URL + "user/change_details",
+      headers: { Authorization: "Bearer " + session?.access_token },
+      data: { first_name: firstName, last_name: lastName },
+    });
+    mutate();
+  };
+
+  // Set initial form values when user data loads
+  useEffect(() => {
+    if (user) {
+      setFirstName(user.first_name);
+      setLastName(user.last_name);
+    }
+  }, [user]);
 
   if (status == "loading" || isLoading) {
     return (
@@ -35,70 +58,83 @@ export default function Profile() {
   }
 
   return (
-    <div className="container mx-auto mt-8 flex max-w-2xl flex-col items-center gap-6">
-      <div className="flex flex-col items-center justify-between gap-4">
-        <div className="flex flex-col items-center gap-6 sm:flex-row">
-          <Image
-            src={session?.picture || ""}
-            alt="Your Discord avatar"
-            width={100}
-            height={100}
-            className="rounded-lg"
-          />
-          <div className="space-y-1 text-center sm:text-left">
-            {user.last_name ? (
-              <>
-                <h1 className="text-2xl font-bold">
-                  {user.first_name} {user.last_name}
-                </h1>
-                <h2 className="text-muted-foreground">
-                  {session.user.username}
-                </h2>
-              </>
-            ) : (
-              <h1 className="text-2xl font-bold">{session.user.username}</h1>
-            )}
+    <div className="container mx-auto mt-8 flex max-w-2xl flex-col items-center gap-8">
+      {/* Profile Overview Section */}
+      <section className="w-full">
+        <h2 className="mb-6 text-xl font-semibold">Profil użytkownika</h2>
+        <div className="rounded-lg border bg-card p-6 shadow-sm">
+          <div className="flex flex-col items-center justify-between gap-4">
+            <div className="flex flex-col items-center gap-6 sm:flex-row">
+              <Image
+                src={session?.picture || ""}
+                alt="Your Discord avatar"
+                width={100}
+                height={100}
+                className="rounded-lg"
+              />
+              <div className="space-y-1 text-center sm:text-left">
+                {user.last_name ? (
+                  <>
+                    <h1 className="text-2xl font-bold">
+                      {user.first_name} {user.last_name}
+                    </h1>
+                    <h2 className="text-muted-foreground">
+                      {session.user.username}
+                    </h2>
+                  </>
+                ) : (
+                  <h1 className="text-2xl font-bold">
+                    {session.user.username}
+                  </h1>
+                )}
 
-            <p className="text-muted-foreground">
-              {session.user.email || "No email provided"}
-            </p>
+                <p className="text-muted-foreground">
+                  {session.user.email || "No email provided"}
+                </p>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-      <div>
-        <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild>
-            <Button variant="default">
-              <span className="flex items-center gap-2">
-                <UserPen className="size-4" />
-                Edytuj imię i nazwisko
-              </span>
+      </section>
+
+      {/* Edit Profile Section */}
+      <section className="w-full">
+        <h2 className="mb-6 text-xl font-semibold">Edycja danych</h2>
+        <div className="rounded-lg border bg-card p-6 shadow-sm">
+          <div className="w-full max-w-md space-y-4">
+            <div className="space-y-2">
+              <Label className="whitespace-nowrap" htmlFor="first_name">
+                Imię: *
+              </Label>
+              <Input
+                type="text"
+                id="first_name"
+                value={firstName || ""}
+                onChange={(e) => setFirstName(e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label className="whitespace-nowrap" htmlFor="last_name">
+                Nazwisko: *
+              </Label>
+              <Input
+                type="text"
+                id="last_name"
+                value={lastName || ""}
+                onChange={(e) => setLastName(e.target.value)}
+              />
+            </div>
+
+            <Button
+              onClick={handleUserDataChange}
+              disabled={!firstName?.trim() || !lastName?.trim()}
+              className="w-full"
+            >
+              Zapisz zmiany
             </Button>
-          </DialogTrigger>
-          <ChangeUserDataModal
-            user={user}
-            onSuccess={() => {
-              setOpen(false);
-              mutate();
-            }}
-          />
-        </Dialog>
-      </div>
-
-      {/* <div className="space-y-4">
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <div className="rounded-lg bg-muted p-4">
-            <p className="text-sm text-muted-foreground">ID użytkownika</p>
-            <p className="font-medium">{session.user.pk}</p>
-          </div>
-          <div className="rounded-lg bg-muted p-4">
-            <p className="text-sm text-muted-foreground">
-              Nazwa użytkownika na Discordzie
-            </p>
-            <p className="font-medium">{session.user.username}</p>
           </div>
         </div>
-      </div> */}
+      </section>
     </div>
   );
 }
