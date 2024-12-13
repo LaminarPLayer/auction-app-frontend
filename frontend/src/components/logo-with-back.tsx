@@ -3,12 +3,12 @@
 import { useHomepageVisited } from "@/lib/contexts/homepage-visited-context";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { LogoBackIcon } from "./logo-back-icon";
+import { usePathname, useRouter } from "next/navigation";
 
 export const LogoWithBack = () => {
   const router = useRouter();
   const { hasVisitedHomepage } = useHomepageVisited();
+  const pathname = usePathname();
 
   const handleLogoClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -22,20 +22,19 @@ export const LogoWithBack = () => {
   return (
     <Link href="/" onClick={handleLogoClick}>
       <div className="relative flex items-center gap-1">
-        <LogoBackIcon className="absolute -left-3 -mr-1 size-4" />
         <Image
           src="/logo-darkmode.svg"
           alt="logo"
           width={36}
           height={36}
-          className="hidden dark:block"
+          className={`rotate hidden transition duration-200 dark:block ${pathname === "/" ? "" : " -rotate-90"}`}
         />
         <Image
           src="/logo-lightmode.svg"
           alt="logo"
           width={36}
           height={36}
-          className="block dark:hidden"
+          className={`block transition duration-200 dark:hidden ${pathname === "/" ? "" : " -rotate-90"}`}
         />
         <h1 className="hidden text-lg font-medium sm:block">
           <span className="hidden md:inline">świąteczna licytacja </span>
