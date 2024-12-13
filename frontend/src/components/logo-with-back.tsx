@@ -1,5 +1,6 @@
 "use client";
 
+import { useHomepageVisited } from "@/lib/contexts/homepage-visited-context";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -7,9 +8,14 @@ import { LogoBackIcon } from "./logo-back-icon";
 
 export const LogoWithBack = () => {
   const router = useRouter();
+  const { hasVisitedHomepage } = useHomepageVisited();
 
   const handleLogoClick = (e: React.MouseEvent) => {
     e.preventDefault();
+    if (hasVisitedHomepage) {
+      router.back();
+      return;
+    }
     router.push("/");
   };
 

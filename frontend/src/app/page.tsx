@@ -7,16 +7,23 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import WelcomeModal from "@/components/welcome-modal";
+import { useHomepageVisited } from "@/lib/contexts/homepage-visited-context";
 import { useWelcomeModal } from "@/lib/contexts/welcome-modal-context";
 import { useUser } from "@/lib/hooks/useUser";
 import { Info } from "lucide-react";
 import { signIn, useSession } from "next-auth/react";
+import { useEffect } from "react";
 import AuctionList from "./auction-list";
 
 export default function Home() {
   const { status } = useSession();
   const { user, isLoading } = useUser();
   const { welcomeModalOpen, setWelcomeModalOpen } = useWelcomeModal();
+  const { setHasVisitedHomepage } = useHomepageVisited();
+
+  useEffect(() => {
+    setHasVisitedHomepage(true);
+  }, [setHasVisitedHomepage]);
 
   if (status === "loading" || isLoading) return <Loader />;
   if (status === "unauthenticated")

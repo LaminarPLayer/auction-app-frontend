@@ -1,6 +1,7 @@
 import Navbar from "@/app/navbar";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
+import { HomepageVisitedProvider } from "@/lib/contexts/homepage-visited-context";
 import { WelcomeModalProvider } from "@/lib/contexts/welcome-modal-context";
 import { EdgeStoreProvider } from "@/lib/edgestore";
 import type { Metadata } from "next";
@@ -33,24 +34,26 @@ export default function RootLayout({
       <NextAuthProvider>
         <PHProvider>
           <WelcomeModalProvider>
-            <body className={`${rubik.className}`}>
-              <PostHogPageView />
-              <PostHogIdentify />
-              <div className="relative flex min-h-screen flex-col items-center">
-                <ThemeProvider
-                  attribute="class"
-                  defaultTheme="system"
-                  enableSystem
-                  disableTransitionOnChange
-                >
-                  <EdgeStoreProvider>
-                    <Navbar />
-                    <main className="w-full">{children}</main>
-                    <Toaster />
-                  </EdgeStoreProvider>
-                </ThemeProvider>
-              </div>
-            </body>
+            <HomepageVisitedProvider>
+              <body className={`${rubik.className}`}>
+                <PostHogPageView />
+                <PostHogIdentify />
+                <div className="relative flex min-h-screen flex-col items-center">
+                  <ThemeProvider
+                    attribute="class"
+                    defaultTheme="system"
+                    enableSystem
+                    disableTransitionOnChange
+                  >
+                    <EdgeStoreProvider>
+                      <Navbar />
+                      <main className="w-full">{children}</main>
+                      <Toaster />
+                    </EdgeStoreProvider>
+                  </ThemeProvider>
+                </div>
+              </body>
+            </HomepageVisitedProvider>
           </WelcomeModalProvider>
         </PHProvider>
       </NextAuthProvider>
