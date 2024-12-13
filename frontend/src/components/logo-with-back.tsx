@@ -16,6 +16,7 @@ export const LogoWithBack = () => {
       router.back();
       return;
     }
+    // TO FIX: there's still an edge case where you open auction/[id], login with discord, then click logo, then go <back> (with browser) and then the button goes to discord site
     router.push("/");
   };
 
