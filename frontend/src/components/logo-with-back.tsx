@@ -12,7 +12,7 @@ export const LogoWithBack = () => {
 
   const handleLogoClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    if (hasVisitedHomepage) {
+    if (hasVisitedHomepage && pathname !== "/") {
       router.back();
       return;
     }
