@@ -47,11 +47,13 @@ const AuctionsStats = () => {
   // my winning bids
   const { winningAuctions } = useWinningAuctions(session?.access_token || "");
 
-  const { auctionsBids: auctionsWithMyWinningBids } =
-    useBidsForMultipleAuctions(
-      session?.access_token || "",
-      winningAuctions ? winningAuctions.auctions : [],
-    );
+  const {
+    auctionsBids: auctionsWithMyWinningBids,
+    isLoading: auctionsWithMyWinningBidsLoading,
+  } = useBidsForMultipleAuctions(
+    session?.access_token || "",
+    winningAuctions ? winningAuctions.auctions : [],
+  );
 
   const myWinningBidsValue = auctionsWithMyWinningBids?.reduce((acc, curr) => {
     const myBid = curr.find((bid) => bid.bidder_id === session?.user?.pk);
@@ -104,7 +106,7 @@ const AuctionsStats = () => {
                     currency: "PLN",
                     minimumFractionDigits: 0,
                   })
-                ) : myAuctionsBidsLoading ? (
+                ) : auctionsWithMyWinningBidsLoading ? (
                   <div className="flex h-10 items-center justify-center">
                     <Loader2 className="size-8 animate-spin" />
                   </div>
