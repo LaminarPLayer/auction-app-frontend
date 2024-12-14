@@ -4,8 +4,10 @@ import AuctionCard from "@/components/auction-card";
 import AuctionsFilter from "@/components/auctions-filter";
 import AuctionsSort from "@/components/auctions-sort";
 import { Loader } from "@/components/loader";
+import { Input } from "@/components/ui/input";
 import { Auction } from "@/lib/types/auction";
 import axios from "axios";
+import { Search } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -108,6 +110,18 @@ const AuctionList = () => {
 
   const { winningAuctions } = useWinningAuctions(session?.access_token || "");
 
+  const [searchQuery, setSearchQuery] = useState(() => {
+    return searchParams.get("search") || "";
+  });
+
+  const handleSearch = useCallback(
+    (query: string) => {
+      setSearchQuery(query);
+      router.push(pathname + "?" + createQueryString("search", query));
+    },
+    [createQueryString, pathname, router],
+  );
+
   if (isLoading) return <Loader />;
 
   if (!auctions) return <div>Failed to load data</div>;
@@ -128,25 +142,49 @@ const AuctionList = () => {
 
   return (
     <div className="flex w-full flex-col items-center gap-4">
-      <div className="flex w-full flex-col items-start gap-3 md:flex-row md:justify-between">
-        <AuctionsFilter
-          selectedOption={selectedOption}
-          setSelectedOption={handleSetSelectedOption}
-        />
-        <AuctionsSort
-          selectedSortOption={selectedSortOption}
-          setSelectedSortOption={handleSetSelectedSortOption}
-        />
+      <div className="flex w-full flex-col items-center gap-4">
+        <div className="flex w-full flex-wrap items-center justify-between gap-1">
+          <div className="flex w-20 grow-0 items-center gap-1">
+            <Search className="h-5 w-5" /> Szukaj:
+          </div>
+          <Input
+            type="search"
+            className="w-auto grow"
+            value={searchQuery}
+            onChange={(e) => handleSearch(e.target.value)}
+          />
+        </div>
+        <div className="flex w-full flex-col items-center gap-2 md:flex-row md:justify-between">
+          <AuctionsFilter
+            selectedOption={selectedOption}
+            setSelectedOption={handleSetSelectedOption}
+          />
+          <AuctionsSort
+            selectedSortOption={selectedSortOption}
+            setSelectedSortOption={handleSetSelectedSortOption}
+          />
+        </div>
       </div>
       <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {auctions
           .filter((auction) => {
+            const matchesSearch = searchQuery
+              ? auction.title
+                  .toLowerCase()
+                  .includes(searchQuery.toLowerCase()) ||
+                auction.description
+                  .toLowerCase()
+                  .includes(searchQuery.toLowerCase())
+              : true;
+
             if (selectedOption === AuctionsFilterOptions.My) {
-              return auction.user === session?.user?.pk;
+              return matchesSearch && auction.user === session?.user?.pk;
             } else if (selectedOption === AuctionsFilterOptions.Bid) {
-              return biddingAuctions?.auctions?.includes(auction.id);
+              return (
+                matchesSearch && biddingAuctions?.auctions?.includes(auction.id)
+              );
             } else {
-              return true;
+              return matchesSearch;
             }
           })
           .sort((a, b) => {
