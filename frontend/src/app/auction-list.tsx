@@ -154,7 +154,7 @@ const AuctionList = () => {
             onChange={(e) => handleSearch(e.target.value)}
           />
         </div>
-        <div className="flex w-full flex-col items-center gap-2 md:flex-row md:justify-between">
+        <div className="flex w-full flex-col items-center gap-4 md:flex-row md:justify-between">
           <AuctionsFilter
             selectedOption={selectedOption}
             setSelectedOption={handleSetSelectedOption}
