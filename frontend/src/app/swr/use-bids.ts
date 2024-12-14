@@ -27,7 +27,7 @@ export function useBidsForMultipleAuctions(
     return Promise.all(urls.map((url) => fetcher(url, accessToken)));
   }
 
-  const { data } = useSWR<Bid[][]>(
+  const { data, isLoading } = useSWR<Bid[][]>(
     auctionIds.map((id) => `auction/${id}/bids`),
     () =>
       multiFetcher(
@@ -38,5 +38,6 @@ export function useBidsForMultipleAuctions(
 
   return {
     auctionsBids: data,
+    isLoading,
   };
 }

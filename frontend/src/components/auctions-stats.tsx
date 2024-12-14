@@ -4,6 +4,7 @@ import { useAuctions, useWinningAuctions } from "@/app/swr/use-auctions";
 import { useBidsForMultipleAuctions } from "@/app/swr/use-bids";
 import { Auction } from "@/lib/types/auction";
 import axios from "axios";
+import { Loader2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import useSWR from "swr";
@@ -22,10 +23,11 @@ const AuctionsStats = () => {
     (auction) => auction.user === session?.user?.pk,
   );
 
-  const { auctionsBids: myAuctionsBids } = useBidsForMultipleAuctions(
-    session?.access_token || "",
-    myAuctions ? myAuctions.map((auction) => auction.id) : [],
-  );
+  const { auctionsBids: myAuctionsBids, isLoading: myAuctionsBidsLoading } =
+    useBidsForMultipleAuctions(
+      session?.access_token || "",
+      myAuctions ? myAuctions.map((auction) => auction.id) : [],
+    );
 
   const myAuctionsWinningBidsValue = myAuctionsBids?.reduce(
     (acc, curr, index) => {
@@ -96,13 +98,19 @@ const AuctionsStats = () => {
                 <span>, za:</span>
               </div>
               <div className="text-4xl font-bold">
-                {myWinningBidsValue
-                  ? myWinningBidsValue.toLocaleString("pl", {
-                      style: "currency",
-                      currency: "PLN",
-                      minimumFractionDigits: 0,
-                    })
-                  : 0}
+                {myWinningBidsValue ? (
+                  myWinningBidsValue.toLocaleString("pl", {
+                    style: "currency",
+                    currency: "PLN",
+                    minimumFractionDigits: 0,
+                  })
+                ) : myAuctionsBidsLoading ? (
+                  <div className="flex h-10 items-center justify-center">
+                    <Loader2 className="size-8 animate-spin" />
+                  </div>
+                ) : (
+                  "..."
+                )}
               </div>
             </div>
           </Card>
@@ -122,20 +130,26 @@ const AuctionsStats = () => {
                   "few"
                     ? "aukcje"
                     : new Intl.PluralRules("pl").select(myAuctions?.length) ===
-                      "one"
-                    ? "aukcję"
-                    : "aukcji"}
+                        "one"
+                      ? "aukcję"
+                      : "aukcji"}
                 </span>
                 <span>, za:</span>
               </div>
               <div className="text-4xl font-bold">
-                {myAuctionsWinningBidsValue
-                  ? myAuctionsWinningBidsValue.toLocaleString("pl", {
-                      style: "currency",
-                      currency: "PLN",
-                      minimumFractionDigits: 0,
-                    })
-                  : 0}
+                {myAuctionsWinningBidsValue ? (
+                  myAuctionsWinningBidsValue.toLocaleString("pl", {
+                    style: "currency",
+                    currency: "PLN",
+                    minimumFractionDigits: 0,
+                  })
+                ) : myAuctionsBidsLoading ? (
+                  <div className="flex h-10 items-center justify-center">
+                    <Loader2 className="size-8 animate-spin" />
+                  </div>
+                ) : (
+                  "..."
+                )}
               </div>
             </div>
           </Card>
@@ -146,13 +160,17 @@ const AuctionsStats = () => {
         <div className="m-6">
           <div>W sumie zebraliśmy:</div>
           <div className="text-4xl font-bold">
-            {!isLoading
-              ? value.toLocaleString("pl", {
-                  style: "currency",
-                  currency: "PLN",
-                  minimumFractionDigits: 0,
-                })
-              : "..."}
+            {!isLoading ? (
+              value.toLocaleString("pl", {
+                style: "currency",
+                currency: "PLN",
+                minimumFractionDigits: 0,
+              })
+            ) : (
+              <div className="flex h-10 items-center justify-center">
+                <Loader2 className="size-8 animate-spin" />
+              </div>
+            )}
           </div>
         </div>
       </Card>
