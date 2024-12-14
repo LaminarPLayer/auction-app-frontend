@@ -152,6 +152,12 @@ const AuctionList = () => {
             className="w-auto grow"
             value={searchQuery}
             onChange={(e) => handleSearch(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                // Blur the input to hide the keyboard
+                e.currentTarget.blur();
+              }
+            }}
           />
         </div>
         <div className="flex w-full flex-col items-center gap-4 md:flex-row md:justify-between">
