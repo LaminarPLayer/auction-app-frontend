@@ -11,7 +11,7 @@ import { Search } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import useSWR from "swr";
 import { useBiddingAuctions, useWinningAuctions } from "./swr/use-auctions";
 
@@ -32,6 +32,8 @@ const AuctionList = () => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+
+  const auctionListRef = useRef<HTMLDivElement>(null);
 
   const createQueryString = useCallback(
     (name: string, value: string) => {
@@ -156,6 +158,12 @@ const AuctionList = () => {
               if (e.key === "Enter") {
                 // Blur the input to hide the keyboard
                 e.currentTarget.blur();
+                if (auctionListRef.current) {
+                  auctionListRef?.current?.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                  });
+                }
               }
             }}
           />
@@ -171,7 +179,10 @@ const AuctionList = () => {
           />
         </div>
       </div>
-      <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div
+        ref={auctionListRef}
+        className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+      >
         {auctions
           .filter((auction) => {
             const matchesSearch = searchQuery
