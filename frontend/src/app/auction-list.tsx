@@ -153,6 +153,7 @@ const AuctionList = () => {
             type="search"
             className="w-auto grow"
             value={searchQuery}
+            placeholder="tytuł, opis lub oferującego"
             onChange={(e) => handleSearch(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
@@ -190,6 +191,12 @@ const AuctionList = () => {
                   .toLowerCase()
                   .includes(searchQuery.toLowerCase()) ||
                 auction.description
+                  .toLowerCase()
+                  .includes(searchQuery.toLowerCase()) ||
+                auction.user_firstname
+                  .toLowerCase()
+                  .includes(searchQuery.toLowerCase()) ||
+                auction.user_lastname
                   .toLowerCase()
                   .includes(searchQuery.toLowerCase())
               : true;
