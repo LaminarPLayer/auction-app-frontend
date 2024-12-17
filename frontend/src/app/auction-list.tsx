@@ -160,10 +160,7 @@ const AuctionList = () => {
                 // Blur the input to hide the keyboard
                 e.currentTarget.blur();
                 if (auctionListRef.current) {
-                  auctionListRef?.current?.scrollIntoView({
-                    behavior: "smooth",
-                    block: "start",
-                  });
+                  auctionListRef?.current?.scrollIntoView(true);
                 }
               }
             }}
@@ -182,7 +179,7 @@ const AuctionList = () => {
       </div>
       <div
         ref={auctionListRef}
-        className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+        className="grid w-full scroll-mt-16 grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
       >
         {auctions
           .filter((auction) => {
