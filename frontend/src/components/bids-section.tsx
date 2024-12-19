@@ -54,20 +54,11 @@ const BidsSection = ({
 
   const [bidValue, setBidValue] = useState<number>(minNewBidValue);
 
-  const auctionDeadlineDate = auction.deadline
-    ? new Date(auction.deadline)
-    : undefined;
-
-  const technicalDeadlineDate = auctionDeadlineDate
-    ? new Date(auctionDeadlineDate)
-    : undefined;
-
-  technicalDeadlineDate?.setHours(technicalDeadlineDate.getHours() + 24);
+  const deadline = auction.deadline ? new Date(auction.deadline) : undefined;
 
   const now = new Date();
 
-  const isDeadlinePassed =
-    technicalDeadlineDate && technicalDeadlineDate < now ? true : false;
+  const isDeadlinePassed = deadline && deadline < now ? true : false;
 
   return (
     <Card>
