@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { toast } from "@/components/ui/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 import { useUser } from "@/lib/hooks/useUser";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 export default function Profile() {
   const { data: session, status } = useSession({ required: true });
   const { user, isLoading, isError, mutate } = useUser();
+  const { toast } = useToast();
 
   // Add state for form inputs
   const [firstName, setFirstName] = useState("");
