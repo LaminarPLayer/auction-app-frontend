@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { toast } from "@/components/ui/use-toast";
 import { useUser } from "@/lib/hooks/useUser";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
@@ -25,6 +26,9 @@ export default function Profile() {
       url: process.env.NEXT_PUBLIC_BACKEND_URL + "user/change_details",
       headers: { Authorization: "Bearer " + session?.access_token },
       data: { first_name: firstName, last_name: lastName },
+    });
+    toast({
+      title: "Ustawiono imię i nazwisko",
     });
     mutate();
   };
