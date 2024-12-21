@@ -6,6 +6,7 @@ export default function CountdownTimer() {
   const [timeRemaining, setTimeRemaining] = useState(0);
 
   const deadline = new Date("2024-12-22T19:30:00.000Z");
+  const isFinalDeadlinePassed = new Date() > deadline;
 
   useEffect(() => {
     setTimeRemaining(
@@ -64,43 +65,53 @@ export default function CountdownTimer() {
 
   return (
     <div className="mx-6 flex flex-col items-center gap-1">
-      <div className="whitespace-nowrap">Do końca licytacji zostało:</div>
-      <div
-        className={`grid ${
-          days > 0
-            ? "grid-cols-[repeat(4,_4.25rem)]"
-            : hours > 0
-              ? "grid-cols-[repeat(3,_4.25rem)]"
-              : minutes > 0
-                ? "grid-cols-[repeat(2,_4.25rem)]"
-                : "grid-cols-[4.25rem]"
-        }`}
-      >
-        {days > 0 && (
-          <div className="flex flex-col items-center">
-            <span className="text-2xl font-bold">{days}</span>
-            <span>{daysUnit(days)}</span>
+      {!isFinalDeadlinePassed ? (
+        <>
+          <div className="whitespace-nowrap">Do końca licytacji zostało:</div>
+          <div
+            className={`grid ${
+              days > 0
+                ? "grid-cols-[repeat(4,_4.25rem)]"
+                : hours > 0
+                  ? "grid-cols-[repeat(3,_4.25rem)]"
+                  : minutes > 0
+                    ? "grid-cols-[repeat(2,_4.25rem)]"
+                    : "grid-cols-[4.25rem]"
+            }`}
+          >
+            {days > 0 && (
+              <div className="flex flex-col items-center">
+                <span className="text-2xl font-bold">{days}</span>
+                <span>{daysUnit(days)}</span>
+              </div>
+            )}
+            {(hours > 0 || days > 0) && (
+              <div className="flex flex-col items-center">
+                <span className="text-2xl font-bold">{hours}</span>
+                <span>{hoursUnit(hours)}</span>
+              </div>
+            )}
+            {(minutes > 0 || hours > 0 || days > 0) && (
+              <div className="flex flex-col items-center">
+                <span className="text-2xl font-bold">{minutes}</span>
+                <span>{minutesUnit(minutes)}</span>
+              </div>
+            )}
+            {(seconds > 0 || minutes > 0 || hours > 0 || days > 0) && (
+              <div className="flex flex-col items-center">
+                <span className="text-2xl font-bold">{seconds}</span>
+                <span>{secondsUnit(seconds)}</span>
+              </div>
+            )}
           </div>
-        )}
-        {(hours > 0 || days > 0) && (
-          <div className="flex flex-col items-center">
-            <span className="text-2xl font-bold">{hours}</span>
-            <span>{hoursUnit(hours)}</span>
-          </div>
-        )}
-        {(minutes > 0 || hours > 0 || days > 0) && (
-          <div className="flex flex-col items-center">
-            <span className="text-2xl font-bold">{minutes}</span>
-            <span>{minutesUnit(minutes)}</span>
-          </div>
-        )}
-        {(seconds > 0 || minutes > 0 || hours > 0 || days > 0) && (
-          <div className="flex flex-col items-center">
-            <span className="text-2xl font-bold">{seconds}</span>
-            <span>{secondsUnit(seconds)}</span>
-          </div>
-        )}
-      </div>
+        </>
+      ) : (
+        <div className="flex flex-col items-center">
+          <span className="text-balance text-center text-2xl font-bold">
+            Licytacje zakończone! Dziękujemy za udział! ❤️
+          </span>
+        </div>
+      )}
     </div>
   );
 }
