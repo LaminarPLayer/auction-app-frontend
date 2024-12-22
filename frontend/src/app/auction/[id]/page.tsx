@@ -13,11 +13,11 @@ export default function AuctionPage({ params }: { params: { id: string } }) {
     session?.access_token ? session?.access_token : "",
   );
 
-  const auctions2 = auctions as Auction[];
+  const typedAuctions = auctions as Auction[];
 
   const soughtAuction =
-    auctions2 &&
-    auctions2.find((auction) => auction.id === parseInt(params.id));
+    typedAuctions &&
+    typedAuctions.find((auction) => auction.id === parseInt(params.id));
 
   if (status === "loading" || isLoading) return <Loader />;
 
