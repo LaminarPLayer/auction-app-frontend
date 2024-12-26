@@ -42,6 +42,10 @@ CSRF_TRUSTED_ORIGINS = [
     "https://*.auction-app-frontend-production.up.railway.app",
     "https://auction-app-frontend-production.up.railway.app",
     "http://auction-app-frontend-production.up.railway.app",
+    "http://*.auction-app-frontend-production-55ae.up.railway.app",
+    "https://*.auction-app-frontend-production-55ae.up.railway.app",
+    "https://auction-app-frontend-production-55ae.up.railway.app",
+    "http://auction-app-frontend-production-55ae.up.railway.app",
 ]
 
 # Application definition
@@ -197,7 +201,7 @@ else:
     CORS_ALLOWED_ORIGINS = [
         "http://localhost:3000/",
         "http://127.0.0.1:3000/",
-        "http://auction-app-frontend-production.up.railway.app"
+        "http://auction-app-frontend-production-55ae.up.railway.app",
     ]
 
 SPECTACULAR_SETTINGS = {
