@@ -58,7 +58,7 @@ const BidsSection = ({
   const deadline = auction.deadline
     ? new Date(`${auction.deadline}T23:59:59.000Z`)
     : undefined;
-  const finalDeadline = new Date("2024-12-22T19:30:00.000Z");
+  const finalDeadline = new Date("2025-12-22T19:30:00.000Z");
 
   const isDeadlinePassed = deadline && deadline < now ? true : false;
   const isFinalDeadlinePassed = finalDeadline < now ? true : false;

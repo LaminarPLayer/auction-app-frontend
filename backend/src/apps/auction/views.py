@@ -17,7 +17,7 @@ class DeadlinePermissions(BasePermission):
     def has_permission(self, request, *args, **kwargs):
         if request.method == "GET":
             return request.user
-        deadline = datetime(2024, 12, 22, 19, 30, tzinfo=timezone.utc)
+        deadline = datetime(2025, 12, 22, 19, 30, tzinfo=timezone.utc)
         return request.user and datetime.now(timezone.utc) < deadline
 
 

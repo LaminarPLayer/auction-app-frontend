@@ -44,7 +44,7 @@ const Page = () => {
       winnersNumber: 1,
       title: "",
       description: "",
-      auctionEnd: new Date("2024-12-22"),
+      auctionEnd: new Date("2025-12-22"),
       bidValue: 10,
     },
   });
@@ -95,7 +95,7 @@ const Page = () => {
     ) {
       return false;
     }
-    const maxDate = new Date("2024-12-23");
+    const maxDate = new Date("2025-12-23");
 
     return date < now || date > maxDate;
   };

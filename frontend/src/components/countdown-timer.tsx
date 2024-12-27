@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 export default function CountdownTimer() {
   const [timeRemaining, setTimeRemaining] = useState(0);
 
-  const deadline = new Date("2024-12-22T19:30:00.000Z");
+  const deadline = new Date("2025-12-22T19:30:00.000Z");
   const isFinalDeadlinePassed = new Date() > deadline;
 
   useEffect(() => {
