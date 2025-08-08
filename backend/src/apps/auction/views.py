@@ -44,21 +44,32 @@ class AuctionViewSet(
 
     @action(url_path='list', detail=False)
     def get_all_auctions(self, request):
-        auctions = Auction.objects.all().order_by('-id')
-        bids = Bid.objects.all()
+        auctions = Auction.objects.select_related('user').prefetch_related('bid_set').order_by('-id')
+        bids = Bid.objects.select_related('user')
         results_data = []
+
         for auction in auctions:
-            result = auction.__dict__
-            auction_owner = auction.user
-            result['user'] = auction_owner.id if auction_owner else None
-            result['user_firstname'] = auction_owner.first_name if auction_owner else None
-            result['user_lastname'] = auction_owner.last_name if auction_owner else None
             top_bid = bids.filter(auction=auction).order_by('-value').first()
-            top_bidder = top_bid.user if top_bid else None 
-            result['top_bid_value'] = top_bid.value if top_bid else None
-            result['top_bidder_firstname'] = top_bidder.first_name if top_bidder else None
-            result['top_bidder_lastname'] = top_bidder.last_name if top_bidder else None
-            results_data.append(result)
+            top_bidder = top_bid.user if top_bid else None
+
+            results_data.append({
+                "id": auction.id,
+                "title": auction.title,
+                "user": auction.user.id,
+                "user_firstname": auction.user.first_name,
+                "user_lastname": auction.user.last_name,
+                "description": auction.description,
+                "photo_url": auction.photo_url,
+                "deadline": auction.deadline,
+                "min_bid_value": auction.min_bid_value,
+                "auction_end_data": auction.auction_end_data,
+                "is_paid": auction.is_paid,
+                "is_collected": auction.is_collected,
+                "num_of_winners": auction.num_of_winners,
+                'top_bid_value': top_bid.value if top_bid else None,
+                'top_bidder_firstname': top_bidder.first_name if top_bidder else None,
+                'top_bidder_lastname': top_bidder.last_name if top_bidder else None
+            })
 
         serializer = AuctionSerializer(data=results_data, many=True)
         serializer.is_valid()
@@ -66,11 +77,10 @@ class AuctionViewSet(
 
     @action(url_path='sum_of_winning_bids', detail=False, methods=["get"])
     def get_sum_of_wining_bids(self, request):
-        auctions = Auction.objects.all()
-        bids = Bid.objects.all()
+        auctions = Auction.objects.prefetch_related('bid_set').all()
         total_winning_sum = 0
         for auction in auctions:
-            auction_bid_values = list(bids.filter(auction=auction).values_list("value", flat=True))
+            auction_bid_values = list(auction.bid_set.all().values_list("value", flat=True))
             auction_bid_values.sort(reverse=True)
             total_winning_sum += sum(auction_bid_values[:min(auction.num_of_winners, len(auction_bid_values))])
         return Response(status=status.HTTP_200_OK, data={"sum": total_winning_sum})
@@ -160,13 +170,15 @@ class UserBidAuctionsViewSet(viewsets.GenericViewSet):
 
     @action(url_path="winning", detail=False, methods=["get"])
     def get(self, request):
-        user_bid_auctions = Auction.objects.filter(bid__user=request.user)
-        bids_in_bid_auctions = Bid.objects.filter(auction__in=user_bid_auctions)
+        user_bid_auctions = Auction.objects.filter(bid__user=request.user).prefetch_related('bid_set__user')
+        bids_in_bid_auctions = Bid.objects.filter(auction__in=user_bid_auctions).select_related('user')
 
         winning_auctions = []
         for auction in user_bid_auctions:
             auction_bids = bids_in_bid_auctions.filter(auction=auction).order_by("-value")
             bids_user_ids = list(auction_bids.values_list("user__id", flat=True))
+            if request.user.id not in bids_user_ids:
+                continue
             bid_user_position = bids_user_ids.index(request.user.id)
 
             if bid_user_position < auction.num_of_winners:
