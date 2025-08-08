@@ -199,9 +199,13 @@ if DEBUG:
     CORS_ALLOW_ALL_ORIGINS = True
 else:
     CORS_ALLOWED_ORIGINS = [
-        "http://localhost:3000/",
-        "http://127.0.0.1:3000/",
-        "http://auction-app-frontend-production-55ae.up.railway.app",
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "https://auction-app-frontend-production-55ae.up.railway.app",
+        "https://auction-app-demo.vercel.app",
+    ]
+    CORS_ALLOWED_ORIGIN_REGEXES = [
+        r"^https://.*\.vercel\.app$",
     ]
 
 SPECTACULAR_SETTINGS = {
